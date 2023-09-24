@@ -9,6 +9,7 @@ export 'dart:convert';
 export 'package:prayer_time_app/src/constants/theme_config.dart';
 export 'package:prayer_time_app/src/constants/api_config.dart';
 export 'package:prayer_time_app/src/constants/api_constants.dart';
+export 'package:prayer_time_app/src/constants/region.dart';
 
 //model
 export 'package:prayer_time_app/src/models/times.dart';
