@@ -9,13 +9,20 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late final MainController controller;
+  int selectedTileIndex = -1;
 
   @override
-  void initState() {
+  void initState(){
     controller = MainController(
       prayerRepository: PrayerRepository(),
     );
     super.initState();
+  }
+
+  void changeSelected(int index) {
+    setState(() {
+      selectedTileIndex = index;
+    });
   }
 
   @override
@@ -25,16 +32,20 @@ class _HomePageState extends State<HomePage> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (controller.prayerList != null) {
-            return ListView(
-              children: controller.prayerList!.map<Widget>((prayer) {
-                return CardItem(
-                  weekName: prayer.weekday ?? "",
-                  date: (prayer.date ?? "").formattedDate,
-                  times: prayer.times,
-                  isOpen: (prayer.date ?? "").isEqualToNow,
-                );
-              }).toList(),
-            );
+            return ListView.builder(
+                key: Key(selectedTileIndex.toString()),
+                itemCount: 7,
+                itemBuilder: (ctx, index) {
+                  return CardItem(
+                    weekName: controller.prayerList?[index].weekday ?? "",
+                    date: (controller.prayerList?[index].date ?? "")
+                        .formattedDate,
+                    index: index,
+                    times: controller.prayerList?[index].times,
+                    selectedIndex: selectedTileIndex,
+                    onExpanded: changeSelected,
+                  );
+                });
           } else {
             return Center(
               child: Text(controller.errorMessage),
